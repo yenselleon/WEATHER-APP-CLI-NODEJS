@@ -77,25 +77,17 @@ class Busquedas {
     }
 
     agregarNuevaBusquedaHistorial(lugar = ''){
-        const limit = 5;
+        const limitIndex = 4;
         const dataDB = leerData();
         this.historial = dataDB;
-        
+
         if(dataDB.includes(lugar.nombre)){
             return 
         }
+
+        this.historial = this.historial.slice(0,limitIndex);
+        this.historial.unshift(lugar.nombre)
         
-        if(this.historial.length < limit ){
-            
-            this.historial.unshift(lugar.nombre)
-            
-        }else{
-            this.historial.pop();
-            this.historial.unshift(lugar.nombre)
-            
-        }
-        
-        console.log(this.historial)
 
         //guardar DB
         guardarDB(this.historial);
