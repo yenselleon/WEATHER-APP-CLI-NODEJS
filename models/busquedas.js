@@ -1,10 +1,11 @@
 const { default: axios } = require("axios");
+const { guardarDB, leerData } = require("../helpers/dbControl");
 
 
 
 class Busquedas {
 
-    busquedas = [];
+    historial = [];
 
     get paramsMapbox(){
         return {
@@ -16,7 +17,7 @@ class Busquedas {
 
 
     constructor (){
-        this.busquedas = busquedas;
+        this.historial = [];
     }
 
     async ciudades(lugar = ''){
@@ -72,6 +73,32 @@ class Busquedas {
         } catch (error) {
             console.log(error)
         }
+
+    }
+
+    agregarNuevaBusquedaHistorial(lugar = ''){
+        const limit = 5;
+        const dataDB = leerData();
+        this.historial = dataDB;
+        
+        if(dataDB.includes(lugar.nombre)){
+            return 
+        }
+        
+        if(this.historial.length < limit ){
+            
+            this.historial.unshift(lugar.nombre)
+            
+        }else{
+            this.historial.pop();
+            this.historial.unshift(lugar.nombre)
+            
+        }
+        
+        console.log(this.historial)
+
+        //guardar DB
+        guardarDB(this.historial);
 
     }
 
